@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>A New Webpage</title>
+
+</head>
+<body>
+<h1>A New Webpage</h1>
+<p>Lorem ipsum dolor amet four loko distillery typewriter twee prism. Umami pinterest knausgaard four dollar toast occupy. Tousled kitsch biodiesel, paleo pickled gastropub organic jianbing locavore keffiyeh fingerstache ennui post-ironic brunch. Readymade la croix iceland man bun.</p>
+<textarea id="test-textarea" cols="100" rows="25">
+
+</textarea>
+<h3 class="score">
+Start typing to create a score.
+</h3>
+<script>var exports = [];</script>
+<script src="flesch-kincaid.js"></script>
+
+<script>
+
+  function ordinal_suffix_of(i) {
+    var j = i % 10,
+        k = i % 100;
+    if (j == 1 && k != 11) {
+        return i + "st";
+    }
+    if (j == 2 && k != 12) {
+        return i + "nd";
+    }
+    if (j == 3 && k != 13) {
+        return i + "rd";
+    }
+    return i + "th";
+  }
+
+  var FleschKincaid = exports;
+
+  const textArea = document.getElementById('test-textarea');
+  const score = document.querySelector('.score');
+  textArea.addEventListener('keyup', function() {
+    setTimeout(() => {
+
+    let rating = Math.max(Math.min(Math.round(FleschKincaid.rate( textArea.value.trim() )), 100), 0);
+    let grade = Math.max(Math.round(FleschKincaid.grade( textArea.value.trim() )), 1);
+    let gradeLevel;
+
+    if (grade <= 12) {
+      gradeLevel = ordinal_suffix_of(grade) + ' grade';
+    } else {
+      gradeLevel = 'college';
+      if (rating < 31) {
+        gradeLevel = 'college graduate';
+      }
+      if (rating < 11) {
+        gradeLevel = 'professional';
+      }
+
+    }
+
+    if(textArea.value) {
+      score.innerHTML = `You have a Flesch–Kincaid score of ${rating}<br>Good for ${gradeLevel}`;
+    } else {
+      score.innerHTML = 'Start typing to create a score.';
+    }
+
+    }, 1500);
+
+
+
+  });
+
+</script>
+
+</body>
+</html>
