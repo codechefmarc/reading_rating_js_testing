@@ -3,20 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <title>A New Webpage</title>
-
 </head>
 <body>
 <h1>A New Webpage</h1>
-<p>Lorem ipsum dolor amet four loko distillery typewriter twee prism. Umami pinterest knausgaard four dollar toast occupy. Tousled kitsch biodiesel, paleo pickled gastropub organic jianbing locavore keffiyeh fingerstache ennui post-ironic brunch. Readymade la croix iceland man bun.</p>
-<textarea id="test-textarea" cols="100" rows="25">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce molestie, magna vel interdum volutpat, orci tellus sagittis quam, vitae consequat erat metus ac neque. Phasellus id risus urna, at adipiscing justo. Fusce sed tortor erat, vel sollicitudin nunc.</p>
 
+<textarea id="test-textarea" cols="100" rows="25">
 </textarea>
 <h3 class="score">
 Start typing to create a score.
 </h3>
-<script>var exports = [];</script>
-<script src="flesch-kincaid.js"></script>
 
+<script src="src/index.js"></script>
 <script>
 
   function ordinal_suffix_of(i) {
@@ -34,22 +32,29 @@ Start typing to create a score.
     return i + "th";
   }
 
-  var FleschKincaid = exports;
+  let textStats = new textstatistics;
 
   const textArea = document.getElementById('test-textarea');
   const score = document.querySelector('.score');
+
   textArea.addEventListener('keyup', function() {
     setTimeout(() => {
 
-    let rating = Math.max(Math.min(Math.round(FleschKincaid.rate( textArea.value.trim() )), 100), 0);
-    let grade = Math.max(Math.round(FleschKincaid.grade( textArea.value.trim() )), 1);
-    let numWords = FleschKincaid.test(textArea.value.trim());
+    let rating = Math.round(textStats.fleschKincaidReadingEase( textArea.value.trim() ));
+    let grade = Math.round(textStats.fleschKincaidGradeLevel( textArea.value.trim() ));
+    let wordCount = textStats.wordCount( textArea.value.trim() );
     let gradeLevel;
+
+    if (grade <= 0) {
+      grade = 1;
+    }
 
     if (grade <= 12) {
       gradeLevel = ordinal_suffix_of(grade) + ' grade';
     } else {
-      gradeLevel = 'college';
+      if (rating < 51) {
+        gradeLevel = 'college';
+      }
       if (rating < 31) {
         gradeLevel = 'college graduate';
       }
@@ -60,7 +65,7 @@ Start typing to create a score.
     }
 
     if(textArea.value) {
-      score.innerHTML = `You have a Flesch–Kincaid score of ${rating}<br>Good for ${gradeLevel} with ${numWords} number of words`;
+      score.innerHTML = `You have a Flesch–Kincaid score of ${rating}<br>Good for ${gradeLevel}<br>Number of words: ${wordCount}`;
     } else {
       score.innerHTML = 'Start typing to create a score.';
     }
@@ -72,6 +77,5 @@ Start typing to create a score.
   });
 
 </script>
-
 </body>
 </html>
